@@ -45,8 +45,27 @@ export async function updateSession(request: NextRequest) {
 
   // Do not run code between createServerClient and supabase.auth.getClaims():
   // it can cause users to be randomly signed out.
-  await supabase.auth.getClaims();
+  const { data } = await supabase.auth.getClaims();
+  const user = data?.claims;
 
-  // Auth-protected route redirects are added in the authentication step.
+  const pathname = request.nextUrl.pathname;
+
+  // Pages that work without logging in.
+  const PUBLIC_PATHS = ["/", "/login", "/register", "/about"];
+
+  // Logged-in users don't need the auth pages.
+  if (user && (pathname === "/login" || pathname === "/register")) {
+    const url = request.nextUrl.clone();
+    url.pathname = "/";
+    return NextResponse.redirect(url);
+  }
+
+  // Everything else requires a session.
+  if (!user && !PUBLIC_PATHS.includes(pathname)) {
+    const url = request.nextUrl.clone();
+    url.pathname = "/login";
+    return NextResponse.redirect(url);
+  }
+
   return supabaseResponse;
 }
