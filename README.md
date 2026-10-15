@@ -35,13 +35,19 @@ A clean, simple billing/invoicing web app. Manage companies (clients), create bi
    npm install
    ```
 
-3. Create a Supabase project and run the SQL from `docs/` in the SQL editor.
+3. Create a [Supabase project](https://supabase.com/dashboard/new), open the
+   SQL Editor and run [`docs/supabase-schema.sql`](docs/supabase-schema.sql).
 
-4. Create a `.env.local` file (never committed) with your Supabase keys:
+4. Copy `.env.example` to `.env.local` (never committed) and fill in your
+   Supabase project URL and publishable key (Dashboard → Project Settings → API):
+
+   ```bash
+   cp .env.example .env.local
+   ```
 
    ```bash
    NEXT_PUBLIC_SUPABASE_URL=<your-url>
-   NEXT_PUBLIC_SUPABASE_ANON_KEY=<your-anon-key>
+   NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=<your-publishable-key>
    ```
 
 5. Run the dev server:
